@@ -1,6 +1,6 @@
 <?php
 
-$length = 5; // 桁数
+$length = 6; // 桁数。ゼロにすると数字をそのまま表示
 
 $filename = "counter.dat";
 
@@ -11,7 +11,13 @@ fseek($fp, 0);
 fputs($fp, $count);
 flock($fp, LOCK_UN);
 fclose($fp);
-echo add_zeros2($count, $length);
+
+if($length > 0) {
+    echo add_zeros2($count, $length);
+} else {
+    echo $count;
+}
+
 
 function add_zeros($count){
     switch(true){
