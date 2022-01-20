@@ -9,12 +9,16 @@ var_dump($ip);
 var_dump($access_date);
 var_dump($access_date_unix);
 
-add_log($ip);
-function  add_log($ip){
-    $path = 'log/test.log';
-//    $mail = "skmt.3b.kzm.knpch@gmail.com";
-    $currentdate = date("Y-m-d_H:i:s");
-    $logmessages = $currentdate . "|" . $ip;
-//    error_log($logmessages . "\n", 1, $mail); // Warning: error_log(): Failed to connect to mailserver at "localhost" port 25, verify your "SMTP" and "smtp_port" setting in php.ini or use ini_set() in C:\xampp\htdocs\myapps\IpLogger\index.php on line 20
-    error_log($logmessages . "\n", 3, $path);
-}
+$path = "log/" . substr($access_date, 0, 10) . ".log";
+$logmessages = $access_date . "|" . $ip;
+error_log($logmessages . "\n", 3, $path);
+
+var_dump($path);
+var_dump($logmessages);
+
+//add_log($ip, $access_date);
+//function  add_log($ip, $date){
+//    $path = "log/" . substr($date, 0, 10) . ".log";
+//    $logmessages = $date . "|" . $ip;
+//    error_log($logmessages . "\n", 3, $path);
+//}
