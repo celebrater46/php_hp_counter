@@ -1,7 +1,6 @@
 <?php
 
-function get_count($length){
-    $ip = $_SERVER["REMOTE_ADDR"];
+function get_count($ip, $length){
     date_default_timezone_set('Asia/Tokyo');
     $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
     $count = check_log($ip, "log/" . substr($access_date, 0, 10) . ".log");
@@ -17,15 +16,12 @@ function check_log($ip, $log){
     if(file_exists($log)){
         $log_array = file($log);
         $same_ip_exists = same_ip_exists($ip, $log_array);
-        if($same_ip_exists === false) {
-            return update_counter();
-        } else {
+        if($same_ip_exists) {
             $fp = fopen("counter.dat", "r+");
             return fgets($fp,32);
         }
-    } else {
-        return update_counter();
     }
+    return update_counter();
 }
 
 function update_counter(){
