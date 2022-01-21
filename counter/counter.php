@@ -13,10 +13,11 @@ function php_hp_counter($mode){
             php_hp_counter フォルダ内に置くことで解決するかもしれません。</div>';
     }
     $setting = get_setting_array($directory);
+//    var_dump($setting[4]);
     switch ($mode){
         case 0:
             return decorate_count(
-                get_count($ip, (int)$setting[0], (int)$setting[1], (bool)$setting[4], $directory),
+                get_count($ip, (int)$setting[0], (int)$setting[1], $setting[4], $directory),
                 "counter total",
                 false
             );
@@ -83,7 +84,7 @@ function open_past_dat($date, $dir){
 }
 
 function check_log($ip, $log, $do_check, $dir){
-    if($do_check){
+    if($do_check !== "false"){
         if(file_exists($log)){
             $log_array = file($log);
             $same_ip_exists = same_ip_exists($ip, $log_array);
