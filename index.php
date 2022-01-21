@@ -1,7 +1,7 @@
 <?php
 
-require_once "counter.php";
-require_once "decorater.php";
+require_once "counter/counter.php";
+require_once "counter/decorater.php";
 
 $ip = $_SERVER["REMOTE_ADDR"];
 
@@ -19,7 +19,7 @@ $class = "counter total";
     <meta name="Author" content="Enin (Eito) Fujimi - 富士見永人">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <title>Shining Font</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="counter/css/style.css" type="text/css">
 </head>
 <body>
     <p><?php echo "total: " . $total; ?></p>
