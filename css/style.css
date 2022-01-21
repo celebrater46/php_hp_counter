@@ -16,16 +16,14 @@ div.counter div{
 
 div.counter.total.kiriban div{
     font-size: 4em;
-    animation: flash 1s infinite; /* アニメーションflashを1秒ごとに繰り返す */
+    animation: flash 1s infinite;
 }
 
 @keyframes flash {
     0%, 100% {
-        /* 明るく光るよう影を重ねる */
         text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
     }
     50% {
-        /* 淡く光るよう影を重ねる */
         text-shadow: 0 0 10px #fff, 0 0 20px #fcfcfc, 0 0 30px #fcfcfc, 0 0 40px #fc00de;
     }
 }

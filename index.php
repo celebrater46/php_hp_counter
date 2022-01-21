@@ -3,13 +3,6 @@
 require_once "counter/counter.php";
 require_once "counter/decorater.php";
 
-//$ip = $_SERVER["REMOTE_ADDR"];
-//
-//$total = get_count($ip, 6); // 第2引数は表示するカウンターの桁数。ゼロにすると数字をそのまま表示
-//$today = get_count_today(2); // 引数は表示桁数
-//$yesterday = get_count_yesterday(2); // 引数は表示桁数
-//$class = "counter total";
-
 ?>
 
 <html>
@@ -21,8 +14,6 @@ require_once "counter/decorater.php";
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
-    <div><?php echo "dir: " . __DIR__; ?></div>
-
     <div><?php echo "total: " . php_hp_counter(0); ?></div>
     <div><?php echo "today: " . php_hp_counter(1); ?></div>
     <div><?php echo "yesterday: " . php_hp_counter(2); ?></div>

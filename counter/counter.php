@@ -5,10 +5,8 @@
 require_once "decorater.php";
 
 function php_hp_counter($mode){
-    // $mode 0 == total, 1 == today, 2 == yesterday
     $ip = $_SERVER['REMOTE_ADDR'];
     $directory = search_current_directory();
-    var_dump($directory);
     if($directory === null) {
         return '<div>setting.txt が読み込めません。<br>
             php_hp_counter() 関数を呼び出す PHP ファイルを <br>
@@ -46,16 +44,6 @@ function get_div($str, $class){
     $div .= '</div>';
     return $div;
 }
-
-//function get_div($str, $class){
-//    $array = str_split($str);
-//    $div = "<div class='" . $class . "'>";
-//    foreach ($array as $char){
-//        $div .= "<div>" . $char . "</div>";
-//    }
-//    $div .= "</div>";
-//    return $div;
-//}
 
 function get_count($ip, $length, $dir){
     date_default_timezone_set('Asia/Tokyo');
@@ -117,18 +105,6 @@ function update_counter($dir){
     return $count;
 }
 
-//function search_file($file_name){
-//    if(file_exists($file_name)){
-//        return $file_name;
-//    } elseif (file_exists("counter/" . $file_name)){
-//        return "counter/" . $file_name;
-//    } elseif (file_exists("php_hp_counter/counter/" . $file_name)){
-//        return "php_hp_counter/counter/" . $file_name;
-//    } else {
-//        return null;
-//    }
-//}
-
 function search_current_directory(){
     $file_name = "counter.dat";
     if(file_exists($file_name)){
@@ -152,7 +128,6 @@ function update_log($ip, $date, $dir){
 }
 
 function create_past_count($date, $dir){
-//    $dat = search_file($dir . "counter.dat");
     $count = file($dir . "counter.dat");
     file_put_contents( $dir . "past/" . $date . ".dat", $count[0]);
 }
@@ -194,16 +169,15 @@ function get_setting_array($dir){
     ip_check:true
     */
     $array = file($dir . "setting.txt");
-//    if(file_exists("setting.txt")){
-//        $array = file("setting.txt");
-//    } elseif (file_exists("counter/setting.txt")){
-//        $array = file("counter/setting.txt");
-//    } elseif (file_exists("php_hp_counter/counter/setting.txt")){
-//        $array = file("php_hp_counter/counter/setting.txt");
-//    } else {
-//        return null;
-//    }
-    var_dump($array);
-    $array = str_replace(["default:", "digit_total:", "digit_today:", "digit_yesterday:", "ip_check:", "\n", "\r", "\r\n"], "", $array);
+    $array = str_replace([
+        "default:",
+        "digit_total:",
+        "digit_today:",
+        "digit_yesterday:",
+        "ip_check:",
+        "\n",
+        "\r",
+        "\r\n"
+    ], "", $array);
     return $array;
 }
