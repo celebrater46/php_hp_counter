@@ -2,14 +2,14 @@
 
 require_once "counter.php";
 
-function decorate_count($count, $class){
+function decorate_count($count, $class, $demo){
     $length = strlen($count); // 桁数
     $lucky_nums = get_lucky_num_array();
     $kiri_nums = get_kiri_nums($length);
     $zorome_nums = get_zorome_nums($length);
     $array = array_merge($lucky_nums, $kiri_nums, $zorome_nums);
     $is_kiriban = is_kiriban($count, $array);
-    if($is_kiriban){
+    if($is_kiriban || $demo){
         return get_div((string)$count, $class . " kiriban");
     } else {
         return get_div((string)$count, $class);

@@ -2,13 +2,23 @@
 
 function get_div($str, $class){
     $array = str_split($str);
-    $div = "<div class='" . $class . "'>";
+    $div = '<div class="' . $class . '">';
     foreach ($array as $char){
-        $div .= "<div>" . $char . "</div>";
+        $div .= '<div>' . $char . '</div>';
     }
-    $div .= "</div>";
+    $div .= '</div>';
     return $div;
 }
+
+//function get_div($str, $class){
+//    $array = str_split($str);
+//    $div = "<div class='" . $class . "'>";
+//    foreach ($array as $char){
+//        $div .= "<div>" . $char . "</div>";
+//    }
+//    $div .= "</div>";
+//    return $div;
+//}
 
 function get_count($ip, $length){
     date_default_timezone_set('Asia/Tokyo');
@@ -110,4 +120,17 @@ function add_zeros($count, $length){
     } else {
         return (string)$count;
     }
+}
+
+function get_setting_array(){
+    /*
+    default:0
+    digit_total:6
+    digit_today:2
+    digit_yesterday:2
+    ip_check:true
+    */
+    $array = file("setting.txt");
+    $array = str_replace(["default:", "digit_total:", "digit_today:", "digit_yesterday:", "ip_check:", "\n", "\r", "\r\n"], "", $array);
+    return $array;
 }

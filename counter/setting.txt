@@ -1,0 +1,5 @@
+default:0
+digit_total:6
+digit_today:3
+digit_yesterday:3
+ip_check:true
