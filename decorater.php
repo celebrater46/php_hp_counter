@@ -35,12 +35,6 @@ function get_lucky_num_array(){
     }
 }
 
-//function get_kiriban_array($length){
-//    $kiri_nums = get_kiri_nums($length);
-//    $zorome_nums = get_zorome_nums($length);
-//    return array_merge($kiri_nums, $zorome_nums);
-//}
-
 function get_kiri_nums($length){
     // 10000, 20000, 30000 ...
     $str = "";

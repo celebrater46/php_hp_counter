@@ -10,12 +10,6 @@ $today = get_count_today(2); // 引数は表示桁数
 $yesterday = get_count_yesterday(2); // 引数は表示桁数
 $class = "counter total";
 
-//echo "total: " . $total . ", ";
-//echo "today: " . $today . ", ";
-//echo "yesterday: " . $yesterday . ", ";
-//
-//echo get_div($total, $class);
-
 ?>
 
 
@@ -34,6 +28,12 @@ $class = "counter total";
 
     <?php echo get_div($total, $class); ?>
 
+    <?php echo decorate_count(77776, $class); ?>
+
     <?php echo decorate_count(77777, $class); ?>
+
+    <?php echo decorate_count(100000, $class); ?>
+
+    <?php echo decorate_count(114514, $class); ?>
 </body>
 </html>
