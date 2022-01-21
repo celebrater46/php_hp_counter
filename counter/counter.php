@@ -1,5 +1,42 @@
 <?php
 
+// Copyright (C) Enin Fujimi All Rights Reserved.
+
+require_once "decorater.php";
+
+function php_hp_counter($mode){
+    // $mode 0 == total, 1 == today, 2 == yesterday
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $directory = search_current_directory();
+    var_dump($directory);
+    if($directory === null) {
+        return '<div>setting.txt が読み込めません。<br>
+            php_hp_counter() 関数を呼び出す PHP ファイルを <br>
+            php_hp_counter フォルダ内に置くことで解決するかもしれません。</div>';
+    }
+    $setting = get_setting_array($directory);
+    switch ($mode){
+        case 0:
+            return decorate_count(
+                get_count($ip, (int)$setting[1], $directory),
+                "counter total",
+                false
+            );
+        case 1:
+            return get_div(
+                get_count_today((int)$setting[2], $directory),
+                "counter today"
+            );
+        case 2:
+            return get_div(
+                get_count_yesterday((int)$setting[3], $directory),
+                "counter yesterday"
+            );
+        default:
+            return '<div>php_hp_counter() の引数の値が不正です。</div>';
+    }
+}
+
 function get_div($str, $class){
     $array = str_split($str);
     $div = '<div class="' . $class . '">';
@@ -20,35 +57,35 @@ function get_div($str, $class){
 //    return $div;
 //}
 
-function get_count($ip, $length){
+function get_count($ip, $length, $dir){
     date_default_timezone_set('Asia/Tokyo');
     $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
-    $count = check_log($ip, "log/" . substr($access_date, 0, 10) . ".log");
-    update_log($ip, $access_date);
+    $count = check_log($ip, $dir . "log/" . substr($access_date, 0, 10) . ".log", $dir);
+    update_log($ip, $access_date, $dir);
     return add_zeros($count, $length);
 }
 
-function get_count_today($length){
+function get_count_today($length, $dir){
     date_default_timezone_set ('Asia/Tokyo');
-    $now = file("counter.dat");
+    $now = file($dir . "counter.dat");
     $d = date('Y-m-d', strtotime('-1 day'));
-    $y = open_past_dat($d);
+    $y = open_past_dat($d, $dir);
     $count = (int)$now[0] - $y;
     return add_zeros($count, $length);
 }
 
-function get_count_yesterday($length){
+function get_count_yesterday($length, $dir){
     date_default_timezone_set ('Asia/Tokyo');
     $d1 = date('Y-m-d', strtotime('-1 day'));
     $d2 = date('Y-m-d', strtotime('-2 day'));
-    $y = open_past_dat($d1);
-    $yy = open_past_dat($d2);
+    $y = open_past_dat($d1, $dir);
+    $yy = open_past_dat($d2, $dir);
     $count = $y - $yy;
     return add_zeros($count, $length);
 }
 
-function open_past_dat($date){
-    $path = "past/" . $date . ".dat";
+function open_past_dat($date, $dir){
+    $path = $dir . "past/" . $date . ".dat";
     if(file_exists($path)){
         $count = file($path);
         return (int)$count[0];
@@ -57,20 +94,20 @@ function open_past_dat($date){
     }
 }
 
-function check_log($ip, $log){
+function check_log($ip, $log, $dir){
     if(file_exists($log)){
         $log_array = file($log);
         $same_ip_exists = same_ip_exists($ip, $log_array);
         if($same_ip_exists) {
-            $count = file("counter.dat");
+            $count = file($dir . "counter.dat");
             return $count[0];
         }
     }
-    return update_counter();
+    return update_counter($dir);
 }
 
-function update_counter(){
-    $fp = fopen("counter.dat", "r+");
+function update_counter($dir){
+    $fp = fopen($dir . "counter.dat", "r+");
     $count = fgets($fp,32);
     $count++;
     fseek($fp, 0);
@@ -80,18 +117,44 @@ function update_counter(){
     return $count;
 }
 
-function update_log($ip, $date){
-    $path = "log/" . substr($date, 0, 10) . ".log";
+//function search_file($file_name){
+//    if(file_exists($file_name)){
+//        return $file_name;
+//    } elseif (file_exists("counter/" . $file_name)){
+//        return "counter/" . $file_name;
+//    } elseif (file_exists("php_hp_counter/counter/" . $file_name)){
+//        return "php_hp_counter/counter/" . $file_name;
+//    } else {
+//        return null;
+//    }
+//}
+
+function search_current_directory(){
+    $file_name = "counter.dat";
+    if(file_exists($file_name)){
+        return "";
+    } elseif (file_exists("counter/" . $file_name)){
+        return "counter/";
+    } elseif (file_exists("php_hp_counter/counter/" . $file_name)){
+        return "php_hp_counter/counter/";
+    } else {
+        return null;
+    }
+}
+
+function update_log($ip, $date, $dir){
+    $path = $dir . "log/" . substr($date, 0, 10) . ".log";
     $msg = $ip . "|" . $date;
     if(file_exists($path) !== true){
-        create_past_count($date);
+        create_past_count($date, $dir);
     }
     error_log($msg . "\n", 3, $path);
 }
 
-function create_past_count($date){
-    $count = file("counter.dat");
-    file_put_contents( "past/" . $date . ".dat", $count[0]);
+function create_past_count($date, $dir){
+//    $dat = search_file($dir . "counter.dat");
+    $count = file($dir . "counter.dat");
+    file_put_contents( $dir . "past/" . $date . ".dat", $count[0]);
 }
 
 function same_ip_exists($ip, $array){
@@ -122,7 +185,7 @@ function add_zeros($count, $length){
     }
 }
 
-function get_setting_array(){
+function get_setting_array($dir){
     /*
     default:0
     digit_total:6
@@ -130,7 +193,17 @@ function get_setting_array(){
     digit_yesterday:2
     ip_check:true
     */
-    $array = file("setting.txt");
+    $array = file($dir . "setting.txt");
+//    if(file_exists("setting.txt")){
+//        $array = file("setting.txt");
+//    } elseif (file_exists("counter/setting.txt")){
+//        $array = file("counter/setting.txt");
+//    } elseif (file_exists("php_hp_counter/counter/setting.txt")){
+//        $array = file("php_hp_counter/counter/setting.txt");
+//    } else {
+//        return null;
+//    }
+    var_dump($array);
     $array = str_replace(["default:", "digit_total:", "digit_today:", "digit_yesterday:", "ip_check:", "\n", "\r", "\r\n"], "", $array);
     return $array;
 }
