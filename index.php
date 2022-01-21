@@ -16,10 +16,10 @@ $class = "counter total";
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="Author" content="Enin (Eito) Fujimi - 富士見永人">
+    <meta name="Author" content="Enin Fujimi">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <title>Shining Font</title>
-    <link rel="stylesheet" href="counter/css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
     <p><?php echo "total: " . $total; ?></p>
