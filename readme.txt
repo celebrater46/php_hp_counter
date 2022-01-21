@@ -32,7 +32,7 @@ html にカウンターを呼び出す場合、サンプルにもありますが
 と書くことでで呼び出すことができます。
 src のディレクトリは貼るページに応じて書き換える必要があります。
 
-なお、<script type="text/javascript" src="counter/update.php"></script>
+なお、<script type="text/javascript" src="counter/stealth.php"></script>
 と書くと、カウンターを表示せずにカウントだけします。
 
 PHP から呼び出す場合は、require 文で counter.php を読み込んだ上で、
