@@ -1,5 +1,5 @@
-default:4500
-digit_total:6
-digit_today:3
-digit_yesterday:3
+default:39184
+digit_total:5
+digit_today:2
+digit_yesterday:2
 ip_check:true

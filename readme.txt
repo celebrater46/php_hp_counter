@@ -30,6 +30,7 @@ html にカウンターを呼び出す場合、サンプルにもありますが
 合計のカウントは　<script type="text/javascript" src="counter/total.php"></script>
 
 と書くことでで呼び出すことができます。
+src のディレクトリは貼るページに応じて書き換える必要があります。
 
 CSS フォルダ内の style.css を編集することで文字の大きさや色、位置などを変えられます。
 
