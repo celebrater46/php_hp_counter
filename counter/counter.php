@@ -125,13 +125,16 @@ function update_log($ip, $date, $dir){
     $path = $dir . "log/" . substr($date, 0, 10) . ".log";
     $msg = $ip . "|" . $date;
     if(file_exists($path) !== true){
-        create_past_count($date, $dir);
+        create_past_count($dir);
     }
     error_log($msg . "\n", 3, $path);
 }
 
-function create_past_count($date, $dir){
+function create_past_count($dir){
+    date_default_timezone_set ('Asia/Tokyo');
+    $date = date('Y-m-d', strtotime('-1 day'));
     $count = file($dir . "counter.dat");
+    var_dump($date);
     file_put_contents( $dir . "past/" . $date . ".dat", $count[0]);
 }
 

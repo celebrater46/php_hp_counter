@@ -1,6 +1,6 @@
 <?php
 
-//require_once "counter/counter.php";
+require_once "counter/counter.php";
 //
 //$str = "<div>333</div>";
 //$str2 = "33d3";
@@ -8,5 +8,6 @@
 //var_dump($num);
 //
 //var_dump(get_setting_array());
-
-echo __DIR__;
+$ip = $_SERVER['REMOTE_ADDR'];
+//create_past_count("2022-01-22", "counter/");
+update_log($ip, "2022-01-22", "counter/");
