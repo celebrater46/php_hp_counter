@@ -16,7 +16,7 @@ function php_hp_counter($mode){
     switch ($mode){
         case 0:
             return decorate_count(
-                get_count($ip, (int)$setting[1], $directory),
+                get_count($ip, (int)$setting[0], (int)$setting[1], $directory),
                 "counter total",
                 false
             );
@@ -45,12 +45,12 @@ function get_div($str, $class){
     return $div;
 }
 
-function get_count($ip, $length, $dir){
+function get_count($ip, $default, $length, $dir){
     date_default_timezone_set('Asia/Tokyo');
     $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
     $count = check_log($ip, $dir . "log/" . substr($access_date, 0, 10) . ".log", $dir);
     update_log($ip, $access_date, $dir);
-    return add_zeros($count, $length);
+    return add_zeros((int)$count + (int)$default, $length);
 }
 
 function get_count_today($length, $dir){

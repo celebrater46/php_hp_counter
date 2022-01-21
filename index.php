@@ -14,6 +14,8 @@ require_once "counter/decorater.php";
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
+    <h1>PHP HP COUNTER</h1>
+
     <div><?php echo "total: " . php_hp_counter(0); ?></div>
     <div><?php echo "today: " . php_hp_counter(1); ?></div>
     <div><?php echo "yesterday: " . php_hp_counter(2); ?></div>

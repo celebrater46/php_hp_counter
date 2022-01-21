@@ -1,4 +1,4 @@
-default:0
+default:4500
 digit_total:6
 digit_today:3
 digit_yesterday:3
