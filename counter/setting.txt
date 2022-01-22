@@ -1,5 +1,5 @@
-default:39784
+default:39184
 digit_total:5
 digit_today:2
 digit_yesterday:2
-ip_check:false
+ip_check:true

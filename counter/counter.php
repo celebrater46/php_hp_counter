@@ -59,7 +59,8 @@ function get_count_today($length, $dir){
     $now = file($dir . "counter.dat");
     $d = date('Y-m-d', strtotime('-1 day'));
     $y = open_past_dat($d, $dir);
-    $count = (int)$now[0] - $y;
+    $temp = (int)$now[0] - $y;
+    $count = $temp < 0 ? 0 : $temp ;
     return add_zeros($count, $length);
 }
 
@@ -69,7 +70,8 @@ function get_count_yesterday($length, $dir){
     $d2 = date('Y-m-d', strtotime('-2 day'));
     $y = open_past_dat($d1, $dir);
     $yy = open_past_dat($d2, $dir);
-    $count = $y - $yy;
+    $temp = $y - $yy;
+    $count = $temp < 0 ? 0 : $temp ;
     return add_zeros($count, $length);
 }
 
