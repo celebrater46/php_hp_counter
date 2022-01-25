@@ -17,7 +17,7 @@ function php_hp_counter($mode){
     switch ($mode){
         case 0:
             return decorate_count(
-                get_count($ip, (int)$setting[0], (int)$setting[1], $setting[4], $directory),
+                get_count((int)$setting[0], (int)$setting[1], $directory),
                 "counter total",
                 false
             );
@@ -31,6 +31,21 @@ function php_hp_counter($mode){
                 get_count_yesterday((int)$setting[3], $directory),
                 "counter yesterday"
             );
+        case 3:
+            date_default_timezone_set('Asia/Tokyo');
+            $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
+            update_log($ip, $access_date, $directory);
+            if($setting[4] === "false"){
+                update_counter($directory);
+            } else {
+                $bool = check_log(
+                    $ip,
+                    $directory . "log/" . substr($access_date, 0, 10) . ".log"
+                );
+                if($bool === false){
+                    update_counter($directory);
+                }
+            }
         default:
             return '<div>php_hp_counter() の引数の値が不正です。</div>';
     }
@@ -46,13 +61,22 @@ function get_div($str, $class){
     return $div;
 }
 
-function get_count($ip, $default, $length, $do_check, $dir){
-    date_default_timezone_set('Asia/Tokyo');
-    $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
-    $count = check_log($ip, $dir . "log/" . substr($access_date, 0, 10) . ".log", $do_check, $dir);
-    update_log($ip, $access_date, $dir);
-    return add_zeros((int)$count + (int)$default, $length);
+function get_count($default, $length, $dir){
+//    date_default_timezone_set('Asia/Tokyo');
+//    $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
+//    $count = check_log($ip, $dir . "log/" . substr($access_date, 0, 10) . ".log", $do_check, $dir);
+//    update_log($ip, $access_date, $dir);
+    $count = file($dir . "counter.dat");
+    return add_zeros((int)$count[0] + (int)$default, $length);
 }
+
+//function get_count($ip, $default, $length, $do_check, $dir){
+//    date_default_timezone_set('Asia/Tokyo');
+//    $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
+//    $count = check_log($ip, $dir . "log/" . substr($access_date, 0, 10) . ".log", $do_check, $dir);
+//    update_log($ip, $access_date, $dir);
+//    return add_zeros((int)$count[0] + (int)$default, $length);
+//}
 
 function get_count_today($length, $dir){
     date_default_timezone_set ('Asia/Tokyo');
@@ -85,19 +109,31 @@ function open_past_dat($date, $dir){
     }
 }
 
-function check_log($ip, $log, $do_check, $dir){
-    if($do_check !== "false"){
-        if(file_exists($log)){
-            $log_array = file($log);
-            $same_ip_exists = same_ip_exists($ip, $log_array);
-            if($same_ip_exists) {
-                $count = file($dir . "counter.dat");
-                return $count[0];
-            }
+function check_log($ip, $log){
+    if(file_exists($log)){
+        $log_array = file($log);
+        $same_ip_exists = same_ip_exists($ip, $log_array);
+        if($same_ip_exists) {
+//            $count = file($dir . "counter.dat");
+            return true;
         }
     }
-    return update_counter($dir);
+    return false;
 }
+
+//function check_log($ip, $log, $do_check, $dir){
+//    if($do_check !== "false"){
+//        if(file_exists($log)){
+//            $log_array = file($log);
+//            $same_ip_exists = same_ip_exists($ip, $log_array);
+//            if($same_ip_exists) {
+//                $count = file($dir . "counter.dat");
+//                return $count[0];
+//            }
+//        }
+//    }
+//    return update_counter($dir);
+//}
 
 function update_counter($dir){
     $fp = fopen($dir . "counter.dat", "r+");
@@ -107,7 +143,7 @@ function update_counter($dir){
     fputs($fp, $count);
     flock($fp, LOCK_UN);
     fclose($fp);
-    return $count;
+//    return $count;
 }
 
 function search_current_directory(){
@@ -183,6 +219,7 @@ function get_setting_array($dir){
         "digit_today:",
         "digit_yesterday:",
         "ip_check:",
+        " ",
         "\n",
         "\r",
         "\r\n"

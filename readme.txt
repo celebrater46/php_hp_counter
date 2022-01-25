@@ -24,16 +24,19 @@ MITライセンスでの配布となります。
 ##############################################
 
 html にカウンターを呼び出す場合、サンプルにもありますが、
+まずサイトの上の方（できれば Body 開始直後）に
+<script type="text/javascript" src="counter/update.php"></script>
+という script タグを仕込みます。
+src のディレクトリは貼るページに応じて書き換える必要があります。
+これはカウンターの更新処理をする専用の機能で、カウンター自体は表示されません。
+
+各カウンターを呼び出すには、
 
 昨日のカウントは　<script type="text/javascript" src="counter/yesterday.php"></script>
 今日のカウントは　<script type="text/javascript" src="counter/today.php"></script>
 合計のカウントは　<script type="text/javascript" src="counter/total.php"></script>
 
-と書くことでで呼び出すことができます。
-src のディレクトリは貼るページに応じて書き換える必要があります。
-
-なお、<script type="text/javascript" src="counter/stealth.php"></script>
-と書くと、カウンターを表示せずにカウントだけします。
+というタグを挿入します。
 
 PHP から呼び出す場合は、require 文で counter.php を読み込んだ上で、
 php_hp_counter(数字) という関数を呼び出します。
@@ -77,6 +80,14 @@ false だとアクセスするたびにカウントが増えます。
 いわゆるキリ番（10000 とか 77777 とか）を踏んだ際に、数字が光る仕様です。
 counter フォルダの中にある「lucky_number.txt」に好きな数字を追加して光らせることができます。
 発光機能はコードをいじらないかぎり解除はできません、仕様です。
+
+
+
+##############################################
+更新履歴
+##############################################
+
+2022/1/25 v1.01:
 
 
 
