@@ -34,7 +34,11 @@ function php_hp_counter($mode){
         case 3:
             date_default_timezone_set('Asia/Tokyo');
             $access_date = date("Y-m-d_H:i:s"); // 2021-01-12 09:45:31
-            update_log($ip, $access_date, $directory);
+            $path = $directory . "log/" . substr($access_date, 0, 10) . ".log";
+            if(file_exists($path) !== true){
+                create_past_count($directory, $setting[0]);
+            }
+            update_log($ip, $access_date, $path);
             if($setting[4] === "false"){
                 update_counter($directory);
             } else {
@@ -159,21 +163,19 @@ function search_current_directory(){
     }
 }
 
-function update_log($ip, $date, $dir){
-    $path = $dir . "log/" . substr($date, 0, 10) . ".log";
+function update_log($ip, $date, $path){
+//    $path = $dir . "log/" . substr($date, 0, 10) . ".log";
     $msg = $ip . "|" . $date;
-    if(file_exists($path) !== true){
-        create_past_count($dir);
-    }
     error_log($msg . "\n", 3, $path);
 }
 
-function create_past_count($dir){
+function create_past_count($dir, $default){
     date_default_timezone_set ('Asia/Tokyo');
     $date = date('Y-m-d', strtotime('-1 day'));
-    $count = file($dir . "counter.dat");
-    var_dump($date);
-    file_put_contents( $dir . "past/" . $date . ".dat", $count[0]);
+    $dat = file($dir . "counter.dat");
+    $count = (int)$dat + (int)$default;
+//    var_dump($date);
+    file_put_contents( $dir . "past/" . $date . ".dat", $count);
 }
 
 function same_ip_exists($ip, $array){
