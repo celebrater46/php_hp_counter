@@ -38,7 +38,6 @@ function php_hp_counter($mode){
             if(file_exists($path) !== true){
                 create_past_count($directory, $setting[0]);
             }
-            update_log($ip, $access_date, $path);
             if($setting[4] === "false"){
                 update_counter($directory);
             } else {
@@ -50,6 +49,7 @@ function php_hp_counter($mode){
                     update_counter($directory);
                 }
             }
+            update_log($ip, $access_date, $path);
         default:
             return '<div>php_hp_counter() の引数の値が不正です。</div>';
     }
@@ -147,7 +147,7 @@ function update_counter($dir){
     fputs($fp, $count);
     flock($fp, LOCK_UN);
     fclose($fp);
-//    return $count;
+    return $count;
 }
 
 function search_current_directory(){
